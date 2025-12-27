@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Talkie-Walkie</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #222; color: white; padding: 20px; }
+        #ptt-btn { 
+            width: 200px; height: 200px; border-radius: 50%; border: none; 
+            background: #c0392b; color: white; font-size: 24px; font-weight: bold;
+            cursor: pointer; margin-top: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+        #ptt-btn:active { background: #e74c3c; transform: scale(0.95); }
+        input { padding: 10px; font-size: 18px; text-align: center; width: 150px; }
+        .status { margin-top: 10px; color: #f1c40f; min-height: 20px;}
+    </style>
+</head>
+<body>
+
+    <h1>📻 Talkie-Walkie Mondial</h1>
+    
+    <div>
+        <label>Fréquence : </label>
+        <input type="text" id="frequency" value="102.5" placeholder="Ex: 102.5">
+        <button onclick="changerFrequence()">Set</button>
+    </div>
+    
+    <div id="status-msg" class="status">Prêt</div>
+
+    <button id="ptt-btn">APPUYER POUR PARLER</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let currentFreq = "102.5";
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // Rejoindre la fréquence par défaut au chargement
+        socket.emit('join-frequency', currentFreq);
+
+        function changerFrequence() {
+            currentFreq = document.getElementById('frequency').value;
+            socket.emit('join-frequency', currentFreq);
+            document.getElementById('status-msg').innerText = `Connecté sur ${currentFreq} MHz`;
+        }
+
+        // Accès Micro
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+
+                // Quand des données audio sont dispos
+                mediaRecorder.addEventListener("dataavailable", event => {
+                    audioChunks.push(event.data);
+                });
+
+                // Quand on relâche le bouton : envoi final
+                mediaRecorder.addEventListener("stop", () => {
+                    const audioBlob = new Blob(audioChunks);
+                    socket.emit('voice-data', { frequency: currentFreq, audioBlob: audioBlob });
+                    audioChunks = []; // Reset
+                });
+            });
+
+        const btn = document.getElementById('ptt-btn');
+
+        // Appui sur le bouton (Ordi + Mobile)
+        const startTalk = (e) => {
+            e.preventDefault(); // Empêche le clic fantôme sur mobile
+            if (mediaRecorder && mediaRecorder.state === "inactive") {
+                mediaRecorder.start();
+                btn.style.background = "#27ae60"; // Vert quand on parle
+                btn.innerText = "ON AIR";
+            }
+        };
+
+        // Relâchement du bouton
+        const stopTalk = (e) => {
+            e.preventDefault();
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.style.background = "#c0392b"; // Rouge
+                btn.innerText = "APPUYER POUR PARLER";
+            }
+        };
+
+        // Événements souris et touche
+        btn.addEventListener('mousedown', startTalk);
+        btn.addEventListener('touchstart', startTalk);
+        btn.addEventListener('mouseup', stopTalk);
+        btn.addEventListener('touchend', stopTalk);
+
+        // Réception Audio des autres
+        socket.on('receive-voice', (blobArray) => {
+            const audioBlob = new Blob([blobArray]);
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+            document.getElementById('status-msg').innerText = "Réception en cours...";
+            audio.onended = () => document.getElementById('status-msg').innerText = `Connecté sur ${currentFreq} MHz`;
+        });
+
+    </script>
+</body>
+</html>
