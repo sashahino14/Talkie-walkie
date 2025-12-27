@@ -12,7 +12,7 @@ io.on('connection', (socket) => {
 
     // 1. Rejoindre une fréquence
     socket.on('join-frequency', (freq) => {
-        // Quitter les autres salles avant (optionnel mais propre)
+        // Quitter les autres salles avant pour éviter les échos
         socket.rooms.forEach(room => {
             if (room !== socket.id) socket.leave(room);
         });
@@ -21,15 +21,19 @@ io.on('connection', (socket) => {
         console.log(`User ${socket.id} a rejoint la fréquence ${freq}`);
     });
 
-    // 2. Recevoir la voix et la renvoyer aux autres sur la même fréquence
+    // 2. Recevoir la voix ET le pseudo
     socket.on('voice-data', (data) => {
-        const { frequency, audioBlob } = data;
-        // Broadcast = envoyer à tout le monde SAUF à l'envoyeur
-        socket.to(frequency).emit('receive-voice', audioBlob);
+        const { frequency, audioBlob, username } = data;
+        
+        // On renvoie un objet complet aux autres : le son + le nom de celui qui parle
+        socket.to(frequency).emit('receive-voice', { 
+            audioBlob: audioBlob, 
+            username: username 
+        });
     });
 });
 
-// Render nous donne un PORT, sinon on utilise 3000
+// Render nous donne un PORT, sinon on utilise 3000 en local
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
     console.log(`Serveur écoute sur le port ${PORT}`);
