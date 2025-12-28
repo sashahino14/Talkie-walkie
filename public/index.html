@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#1a2530">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,25 +18,20 @@
             font-family: 'Share Tech Mono', monospace; 
             background: radial-gradient(circle at center, #1a2530, #000); 
             margin: 0; padding: 0;
-            height: 100vh; 
+            height: 100vh; height: 100dvh;
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            overflow: hidden; overscroll-behavior: none;
         }
 
-        /* --- LE BOITIER --- */
+        /* --- BOITIER --- */
         .walkie-case {
-            width: 320px;
-            height: 600px;
+            width: 95%; max-width: 350px; height: 92vh; max-height: 680px;
             background: linear-gradient(145deg, #2b2b2b, #1e1e1e);
-            border-radius: 40px;
-            box-shadow: 
-                25px 25px 70px #080808, 
-                -5px -5px 20px #3a3a3a,
-                inset 0 0 30px rgba(0,0,0,0.9);
+            border-radius: 30px;
+            box-shadow: 20px 20px 50px #080808, -5px -5px 20px #3a3a3a, inset 0 0 30px rgba(0,0,0,0.9);
             display: flex; flex-direction: column; align-items: center;
-            padding: 35px 25px;
-            position: relative;
-            border: 3px solid #111;
+            padding: 20px; position: relative; border: 3px solid #111;
+            transition: all 0.3s ease;
         }
 
         .screw { width: 10px; height: 10px; background: #111; border-radius: 50%; position: absolute; box-shadow: inset 1px 1px 2px #555; }
@@ -44,23 +39,21 @@
         .bl { bottom: 15px; left: 15px; } .br { bottom: 15px; right: 15px; }
 
         .antenna {
-            position: absolute; top: -70px; right: 50px;
-            width: 24px; height: 80px;
+            position: absolute; top: -60px; right: 40px;
+            width: 20px; height: 70px;
             background: #222; border-radius: 12px 12px 0 0; z-index: -1;
             border: 3px solid #000; background: linear-gradient(90deg, #111, #333, #111);
         }
 
+        /* --- ECRAN --- */
         .screen-container {
-            width: 100%; background: #000; padding: 15px; border-radius: 10px;
-            border: 2px solid #333; margin-bottom: 25px; box-shadow: inset 0 0 15px #000; position: relative;
+            width: 100%; background: #000; padding: 10px; border-radius: 10px;
+            border: 2px solid #333; margin-bottom: 15px; 
+            box-shadow: inset 0 0 15px #000; position: relative; flex-shrink: 0;
         }
-        .screen-container::after {
-            content: ''; position: absolute; top: 0; right: 0; width: 40%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05)); pointer-events: none;
-        }
-
+        
         .lcd-screen {
-            background: #2d3828; height: 90px; border-radius: 4px;
+            background: #2d3828; height: 80px; border-radius: 4px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: #1a2416; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); transition: all 0.3s;
             position: relative; overflow: hidden;
@@ -71,28 +64,32 @@
             box-shadow: 0 0 20px rgba(111, 224, 168, 0.2);
         }
 
-        .freq-display { font-size: 36px; letter-spacing: 3px; font-weight: bold; }
-        .status-line { font-size: 14px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;}
+        .freq-display { font-size: 32px; letter-spacing: 3px; font-weight: bold; }
+        .status-line { font-size: 12px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;}
 
-        .inputs-row { display: flex; gap: 10px; width: 100%; margin-bottom: 20px; }
+        /* --- INPUTS --- */
+        .inputs-row { display: flex; gap: 8px; width: 100%; margin-bottom: 15px; flex-shrink: 0; }
         .retro-input {
             background: #151515; border: 1px solid #333; color: #6fe0a8;
             padding: 10px; border-radius: 5px; width: 100%;
-            font-family: inherit; text-align: center; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+            font-family: inherit; text-align: center; font-size: 13px; 
+            letter-spacing: 1px; text-transform: uppercase;
         }
-        .retro-input::placeholder { color: #334433; }
         .retro-input:focus { outline: none; border-color: #6fe0a8; box-shadow: 0 0 10px rgba(111,224,168,0.1); }
 
+        /* --- SPEAKER --- */
         .speaker-grille {
-            width: 100%; height: 110px;
+            width: 100%; flex-grow: 1; min-height: 40px;
             background: radial-gradient(circle, #000 30%, transparent 35%), linear-gradient(#222, #1a1a1a);
-            background-size: 8px 8px, 100% 100%; margin-bottom: 35px; border-radius: 8px;
+            background-size: 8px 8px, 100% 100%; margin-bottom: 20px; border-radius: 8px;
             border: 1px solid #000; box-shadow: inset 0 0 10px #000;
         }
 
+        /* --- PTT --- */
         .ptt-container {
-            position: relative; width: 130px; height: 130px;
+            position: relative; width: 120px; height: 120px;
             display: flex; justify-content: center; align-items: center;
+            flex-shrink: 0; margin-bottom: 10px;
         }
         .ptt-ring {
             position: absolute; width: 100%; height: 100%;
@@ -101,10 +98,10 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         #ptt-btn {
-            width: 100px; height: 100px; border-radius: 50%; border: none;
+            width: 90px; height: 90px; border-radius: 50%; border: none;
             background: radial-gradient(circle at 30% 30%, #ff5555, #990000);
             box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,0,0,0.5);
-            color: rgba(255,255,255,0.9); font-family: inherit; font-weight: bold; font-size: 13px;
+            color: rgba(255,255,255,0.9); font-family: inherit; font-weight: bold; font-size: 12px;
             cursor: pointer; transition: all 0.1s; z-index: 10;
         }
         #ptt-btn:active, .btn-pressed {
@@ -112,25 +109,31 @@
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
         }
 
-        .led-container {
-            position: absolute; top: 25px; left: 25px; display: flex; align-items: center; gap: 5px;
-        }
+        .led-container { position: absolute; top: 20px; left: 20px; display: flex; align-items: center; gap: 5px; }
         .led {
-            width: 12px; height: 12px; background: #220000; border-radius: 50%;
+            width: 10px; height: 10px; background: #220000; border-radius: 50%;
             box-shadow: inset 0 0 2px #000; border: 1px solid #000; transition: 0.2s;
         }
-        .led-label { font-size: 10px; color: #444; font-weight: bold; }
         .led.tx { background: #ff3333; box-shadow: 0 0 8px #ff3333; } 
         .led.rx { background: #00ff00; box-shadow: 0 0 8px #00ff00; }
+        .led-label { font-size: 9px; color: #444; font-weight: bold; }
 
         .brand {
-            margin-top: auto; color: #444; font-size: 10px; letter-spacing: 2px;
-            width: 100%; text-align: center; padding-top: 15px; text-transform: uppercase; opacity: 0.7;
+            margin-top: auto; color: #444; font-size: 9px; letter-spacing: 2px;
+            width: 100%; text-align: center; padding-top: 10px; text-transform: uppercase; opacity: 0.7; flex-shrink: 0;
         }
         .brand span { color: #666; font-weight: bold; }
 
-        @media (max-width: 400px) {
-            .walkie-case { width: 100%; height: 100vh; border-radius: 0; border: none; }
+        @media (max-height: 680px) {
+            .walkie-case { padding: 15px; border-radius: 20px; }
+            .antenna { display: none; }
+            .lcd-screen { height: 60px; }
+            .freq-display { font-size: 24px; }
+            .speaker-grille { margin-bottom: 15px; }
+            .ptt-container { width: 100px; height: 100px; }
+            #ptt-btn { width: 75px; height: 75px; font-size: 10px; }
+            .inputs-row { margin-bottom: 10px; }
+            .brand { padding-top: 5px; font-size: 8px; }
         }
     </style>
 </head>
@@ -149,14 +152,14 @@
         <div class="screen-container">
             <div class="lcd-screen" id="lcd">
                 <div class="freq-display" id="freq-text">102.5</div>
-                <div class="status-line" id="lcd-status">PRET</div>
+                <div class="status-line" id="lcd-status">INITIALISATION...</div>
             </div>
         </div>
 
         <div class="inputs-row">
             <input type="text" class="retro-input" id="username" placeholder="NOM DE CODE" value="SPECTRE-01">
             <input type="text" class="retro-input" id="frequency" value="102.5" placeholder="CANAL">
-            <button onclick="changerFrequence()" class="retro-input" style="width: 50px; background:#222; cursor:pointer;">OK</button>
+            <button onclick="rejoindreFrequence()" class="retro-input" style="width: 40px; background:#222; cursor:pointer;">OK</button>
         </div>
 
         <div class="speaker-grille"></div>
@@ -173,83 +176,88 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        // PWA Setup
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(() => console.log('Service Worker OK'))
-                .catch(err => console.log('SW Error:', err));
+            navigator.serviceWorker.register('/sw.js').catch(console.log);
         }
 
         const socket = io();
-        let currentFreq = "102.5";
         let mediaRecorder;
         let audioChunks = [];
+        let connectedAgents = 0;
         
-        // --- NOUVEAU : SYSTÈME AUDIO FX ---
-        // On crée un contexte audio pour générer le bruit
+        // Audio Squelch (Bruitage)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
         function playSquelch() {
-            // Création d'un buffer de bruit blanc (0.15 secondes)
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const bufferSize = audioCtx.sampleRate * 0.15;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
-            
-            // Remplissage avec des valeurs aléatoires (statique)
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * 0.5; // *0.5 pour réduire le volume
-            }
-
+            for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
             const noise = audioCtx.createBufferSource();
             noise.buffer = buffer;
-            
-            // Ajout d'un contrôle de volume pour faire un fondu
             const gainNode = audioCtx.createGain();
             gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-
             noise.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             noise.start();
         }
 
-        // --- Logique App ---
+        // Elements UI
         const btn = document.getElementById('ptt-btn');
         const lcd = document.getElementById('lcd');
         const lcdStatus = document.getElementById('lcd-status');
         const freqText = document.getElementById('freq-text');
         const led = document.getElementById('led-light');
 
-        socket.emit('join-frequency', currentFreq);
-        lcd.classList.add('lcd-active'); 
+        // --- INIT ---
+        // On attend un tout petit peu que le socket soit prêt
+        setTimeout(() => rejoindreFrequence(), 500);
 
-        function changerFrequence() {
-            currentFreq = document.getElementById('frequency').value;
-            freqText.innerText = currentFreq;
-            socket.emit('join-frequency', currentFreq);
+        function rejoindreFrequence() {
+            const freq = document.getElementById('frequency').value;
+            const user = document.getElementById('username').value;
+            
+            freqText.innerText = freq;
+            
+            // On envoie un OBJET maintenant : { frequency, username }
+            socket.emit('join-frequency', { frequency: freq, username: user });
+            
             lcd.classList.remove('lcd-active');
             setTimeout(() => lcd.classList.add('lcd-active'), 150);
-            lcdStatus.innerText = "LIAISON ETABLIE";
-            // On réactive l'audio au clic (pour Chrome/Mobile)
+            
             if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
+        // --- ECOUTE DES MISES A JOUR DE PRESENCE ---
+        socket.on('update-user-list', (agents) => {
+            connectedAgents = agents.length;
+            // Met à jour l'écran avec le nombre d'agents
+            lcdStatus.innerText = `NET: ${connectedAgents} ACTIFS`;
+            
+            // Petit flash de LED pour dire "Info reçue"
+            led.style.backgroundColor = "#ffff00"; // Jaune
+            setTimeout(() => led.style.backgroundColor = "#220000", 200);
+        });
+
+        // --- MICRO ---
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.addEventListener("dataavailable", event => audioChunks.push(event.data));
                 mediaRecorder.addEventListener("stop", () => {
                     const audioBlob = new Blob(audioChunks);
-                    const myName = document.getElementById('username').value;
-                    socket.emit('voice-data', { frequency: currentFreq, audioBlob: audioBlob, username: myName });
+                    const user = document.getElementById('username').value;
+                    const freq = document.getElementById('frequency').value;
+                    socket.emit('voice-data', { frequency: freq, audioBlob: audioBlob, username: user });
                     audioChunks = [];
                 });
             })
             .catch(err => lcdStatus.innerText = "ERR: MICRO HS");
 
+        // --- BOUTON PTT ---
         const startTalk = (e) => {
             if(e.cancelable) e.preventDefault();
-            // Important : Réveiller le moteur audio sur Mobile
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
             if (mediaRecorder && mediaRecorder.state === "inactive") {
@@ -267,10 +275,9 @@
                 mediaRecorder.stop();
                 btn.classList.remove('btn-pressed');
                 led.className = "led"; 
-                lcdStatus.innerText = "SYSTEME PRET"; 
+                // On remet le statut de réseau
+                lcdStatus.innerText = `NET: ${connectedAgents} ACTIFS`; 
                 lcd.style.background = ""; 
-                
-                // JOUER LE SQUELCH (Fin de ma transmission)
                 playSquelch();
             }
         };
@@ -281,26 +288,23 @@
         btn.addEventListener('touchend', stopTalk, {passive: false});
         btn.addEventListener('mouseleave', stopTalk);
 
+        // --- RECEPTION AUDIO ---
         socket.on('receive-voice', (data) => {
             const audioBlob = new Blob([data.audioBlob]);
             const audioUrl = URL.createObjectURL(audioBlob);
             const audio = new Audio(audioUrl);
             
-            lcdStatus.innerText = "RECEPTION: " + data.username;
+            lcdStatus.innerText = "RX: " + data.username;
             led.className = "led rx"; 
             lcd.style.background = "#aaffaa"; 
             
-            // Réveiller l'audio si besoin
             if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            audio.play().catch(e => console.log(e));
+            audio.play().catch(console.log);
 
             audio.onended = () => {
                 led.className = "led";
-                lcdStatus.innerText = "SYSTEME PRET";
+                lcdStatus.innerText = `NET: ${connectedAgents} ACTIFS`;
                 lcd.style.background = "";
-                
-                // JOUER LE SQUELCH (Fin de réception)
                 playSquelch();
             };
         });
