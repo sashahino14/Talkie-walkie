@@ -13,7 +13,7 @@ self.addEventListener('install', (e) => {
   );
 });
 
-// Activation (nettoyage)
+// Activation (Nettoyage des vieux caches)
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keyList) => {
@@ -24,7 +24,7 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Interception des requêtes (Mode hors ligne basique)
+// Interception réseau
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => response || fetch(e.request))
